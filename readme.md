@@ -9,7 +9,11 @@ This is a complete cross platforming library.  This can be utilized to build Uni
 Usage
 =====
 #####Overview
-The process to use these classes is quite simple, with only one prerequisite: the error handler.
+The process to use these classes is quite simple, with only a few prerequisites:
+
+* error.cpp
+* error.h
+* os.h
 
 #####Installation
 First, you must decide which of these classes your program will need to have in order to run.  Once you have decided which you wish to take, copy and paste the source (.cpp) files and header (.h) files that share the same name and put them in your application's source directory.  You must then include the header (.h) files in your main source (.cpp) file.  By including them, your compiler will have the callouts for the file to compile with the class sources.
