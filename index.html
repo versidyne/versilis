@@ -28,9 +28,62 @@
     <div id="content-wrapper">
       <div class="inner clearfix">
         <section id="main-content">
-          <h1>versilis</h1>
+          <h5>Overview</h5>
 
-<p>C++ Native Cross Platform Library</p>
+<p>This is a complete cross platforming library.  This can be utilized to build Unix, Windows, or Android applications that can be compiled directly on each system.</p>
+
+<h5>Main Goals</h5>
+
+<ul>
+<li>Maintain a solid cross-platform library of which development can take place.  This library is meant to be universal, so each class must provide an extremely specific role while maintaining optimal code and complex functions with an friendly interface.</li>
+</ul><h1>Usage</h1>
+
+<h5>Overview</h5>
+
+<p>The process to use these classes is quite simple, with only a few prerequisites:</p>
+
+<ul>
+<li>error.cpp</li>
+<li>error.h</li>
+<li>os.h</li>
+</ul><h5>Installation</h5>
+
+<p>First, you must decide which of these classes your program will need to have in order to run.  Once you have decided which you wish to take, copy and paste the source (.cpp) files and header (.h) files that share the same name and put them in your application's source directory.  You must then include the header (.h) files in your main source (.cpp) file.  By including them, your compiler will have the callouts for the file to compile with the class sources.</p>
+
+<div class="highlight"><pre><span class="c1">//Sample Includes</span>
+<span class="cp">#include "http.h"</span>
+<span class="cp">#include "text.h"</span>
+</pre></div>
+
+<h5>Format</h5>
+
+<p>Each class will have a similar format of usage...</p>
+
+<div class="highlight"><pre><span class="c1">//Sample Format</span>
+
+<span class="c1">//object oriented class style information here</span>
+<span class="n">echo</span> <span class="s">"Hello World!"</span><span class="p">;</span>
+</pre></div>
+
+<h1>Classes</h1>
+
+<h5>Overview</h5>
+
+<p>The following classes each have a source and header file which work together to represent a class.  Each will have a similar format of usage while maintaining optimal architecture.</p>
+
+<h5>Error Handler</h5>
+
+<p>This class handles errors made by all other classes.</p>
+
+<div class="highlight"><pre><span class="c1">//Sample Format</span>
+
+<span class="c1">//object oriented class style information here</span>
+<span class="n">echo</span> <span class="s">"Hello World!"</span><span class="p">;</span>
+</pre></div>
+
+<h1>Credits</h1>
+
+<p>This project has always been built by only one programmer, Alex Gurrola.  One day he hopes this system will no longer require his influence to progress without feature creep.</p>
         </section>
 
         <aside id="sidebar">
