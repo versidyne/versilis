@@ -8,7 +8,6 @@
 #include <string.h>
 #include <iostream>
 
-// versidyne libraries
 #include "os.h"
 #include "error.h"
 

@@ -22,4 +22,4 @@ json::json () { /* do nothing */ }
 json::json (char *raw) { storage = raw; }
 
 // operators
-void emotion::operator = (char *raw) { storage = raw; }
+void json::operator = (char *raw) { storage = raw; }
