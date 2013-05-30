@@ -1,83 +1,10 @@
-// cpu.cpp -- Handles CPU specific routines.
-//            File Version: 1.0
+// cpu.cpp -- Gathers CPU information
+//            File Version: 1.1
 
 using namespace std;
 
 #include "common.h"
 #include "cpu.h"
-
-// Define types
-typedef unsigned char uchar;
-typedef uchar byte;
-
-//Set bit n to 1
-#define bit(n) (1<<(n))
-
-// Check if bit n in flags is set
-#define check_flag(flags, n) ((flags) & bit(n))
-
-// Start Interrupts
-void sti() {
-	asm volatile("sti");
-}
-
-// Close Interrupts
-void cli() {
-	asm volatile("cli");
-}
-
-// Halt System
-void halt() {
-	asm volatile("hlt");
-}
-
-// Reboot system
-void reboot() {
-	
-	byte temp;
-	
-	cli();
-	
-	// Clear all keyboard buffers (output and command buffers)
-    do {
-		// Empty user data
-        temp = inb(0x64);
-        // Empty keyboard data
-        if (check_flag(temp, 0) != 0) {
-			inb(0x60);
-		}
-    }
-    while (check_flag(temp, 1) != 0);
-	
-	// Send reboot command (8042 reset pin) and halt if failed
-	outb (0x64, 0xFE);
-	halt();
-	
-}
-
-// Read CMOS data
-unsigned char readCMOS(unsigned char addr) {
-	
-	unsigned char ret;
-	
-	outb(0x70,addr);
-	asm volatile("jmp 1f; 1: jmp 1f;1:");
-	ret = inb(0x71);
-	asm volatile("jmp 1f; 1: jmp 1f;1:");
-	
-	return ret;
-	
-}
-
-// Write CMOS data
-void writeCMOS(unsigned char addr, unsigned int value) {
-	
-	outb(0x70, addr);
-	asm volatile("jmp 1f; 1: jmp 1f;1:");
-	outb(0x71, value);
-	asm volatile("jmp 1f; 1: jmp 1f;1:");
-	
-}
 
 // Detects the current CPU
 int detect_cpu(void) {
