@@ -1,10 +1,12 @@
 // cpu.cpp -- Gathers CPU information
 //            File Version: 1.1
 
-using namespace std;
-
 #include "common.h"
 #include "cpu.h"
+
+#include <iostream>
+
+using namespace std;
 
 // Detects the current CPU
 int detect_cpu(void) {
@@ -121,7 +123,7 @@ int do_amd(void) {
 }
 
 /* Intel Specific brand list */
-char *Intel[] = {
+const char *Intel[] = {
 	"Brand ID Not Supported.", 
 	"Intel(R) Celeron(R) processor", 
 	"Intel(R) Pentium(R) III processor", 
@@ -150,7 +152,7 @@ char *Intel[] = {
 
 /* This table is for those brand strings that have two values depending on the processor signature.
  * It should have the same number of entries as the above table. */
-char *Intel_Other[] = {
+const char *Intel_Other[] = {
 	"Reserved", 
 	"Reserved", 
 	"Reserved", 
@@ -294,6 +296,18 @@ int do_intel(void) {
 			break;
 			case 8:
 			cout << "Pentium III/Pentium III Xeon - internal L2 cache";
+			break;
+			case 9:
+			cout << "Pentium M/Celeron M";
+			break;
+			case 10:
+			cout << "Pentium III Xeon";
+			break;
+			case 11:
+			cout << "Pentium III/Celeron";
+			break;
+			case 13:
+			cout << "Pentium M";
 			break;
 		}
 		break;
