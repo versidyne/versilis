@@ -4,19 +4,19 @@
 #ifndef CPU_H
 #define CPU_H
 
-// Define CPUID
-#define cpuid(in, a, b, c, d) __asm__("cpuid": "=a" (a), "=b" (b), "=c" (c), "=d" (d) : "a" (in));
+// CPUID Assembly Function
+void cpuid(int func, int &ax, int &bx, int &cx, int &dx);
 
 // Detects the current CPU
-int detect_cpu(void);
+int cpu(void);
 
 // Print Registers
-void printregs(int eax, int ebx, int ecx, int edx);
+void registers(int eax, int ebx, int ecx, int edx);
 
 // Intel-specific information
-int do_intel(void);
+int intel(void);
 
 // AMD-specific information
-int do_amd(void);
+int amd(void);
 
 #endif // CPU_H

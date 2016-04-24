@@ -8,18 +8,20 @@
 
 // json parsing class
 class json {
-	
-	public:
-		// constructors
-		json ();
-		json (char *raw);
-		// operators
-		void operator = (char *raw);
-		
-	private:
-		// local data
-		char *storage;
-		
+
+public:
+    // constructors
+    json();
+
+    json(char *raw);
+
+    // operators
+    void operator=(char *raw);
+
+private:
+    // local data
+    char *storage;
+
 };
 
 #endif

@@ -13,24 +13,24 @@
 
 // windows networking
 #if defined OS_WIN
-	#include <windows.h>
-	#include <windowsx.h>
-	#include <commctrl.h>
-	#include <winsock.h>
+#include <windows.h>
+#include <windowsx.h>
+#include <commctrl.h>
+#include <winsock.h>
 #endif
 
 // unix networking
 #if defined OS_UNIX
-	#include <netdb.h>
-	#include <netinet/in.h>
-	#include <sys/socket.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
 #endif
 
 // class header
 #include "netsock.h"
 
 // constructors
-netsock::netsock () { /* bi = 0; */ }
+netsock::netsock() { /* bi = 0; */ }
 
 // operators
 /*netsock & netsock::operator << (const char* buf) {
@@ -54,173 +54,173 @@ netsock::netsock () { /* bi = 0; */ }
 }*/
 
 // connect function
-int netsock::connect (const char *hostname, int port) {
+int netsock::connect(const char *hostname, int port) {
 
-	// create data blocks
-	int csock;
-	struct hostent *server;
-	struct sockaddr_in serv_addr;
+    // create data blocks
+    int csock;
+    struct hostent *server;
+    struct sockaddr_in serv_addr;
 
-	#if defined OS_WIN
-		DWORD dwError;
-		WORD wVersionRequested;
-		WSADATA wsaData;
-	#endif
+#if defined OS_WIN
+    DWORD dwError;
+    WORD wVersionRequested;
+    WSADATA wsaData;
+#endif
 
-	// open socket
-	csock = ::socket(AF_INET, SOCK_STREAM, 0);
+    // open socket
+    csock = ::socket(AF_INET, SOCK_STREAM, 0);
 
-	if (csock < 0) {
-		error(1, 1, "opening socket");
-	}
+    if (csock < 0) {
+        error(1, 1, "opening socket");
+    }
 
-	// initialize winsock
-	#if defined OS_WIN
-		wVersionRequested = MAKEWORD( 1, 1 );
-		WSAStartup( wVersionRequested, &wsaData );
-	#endif
+    // initialize winsock
+#if defined OS_WIN
+    wVersionRequested = MAKEWORD( 1, 1 );
+    WSAStartup( wVersionRequested, &wsaData );
+#endif
 
-	// store server name
-	server = gethostbyname(hostname);
+    // store server name
+    server = gethostbyname(hostname);
 
-	// check if the server exists
-	if (server == NULL) {
+    // check if the server exists
+    if (server == NULL) {
 
-		#if defined OS_WIN
-			
-			dwError = WSAGetLastError();
-			
-			if (dwError == WSAHOST_NOT_FOUND) {
-				printf("Host not found\n");
-			}
-			
-			else if (dwError == WSANO_DATA) {
-				printf("No data record found\n");
-			}
-			
-			else {
-				printf("Function failed with error: %ld\n", dwError);
-			}
-			
-		#endif
+#if defined OS_WIN
 
-		#if defined OS_UNIX
-			error (1, 2, "host non-existant");
-		#endif
+        dwError = WSAGetLastError();
 
-		return 0;
+        if (dwError == WSAHOST_NOT_FOUND) {
+            printf("Host not found\n");
+        }
 
-	}
+        else if (dwError == WSANO_DATA) {
+            printf("No data record found\n");
+        }
 
-	// prepare connection (clear the buffer)
-	#if defined OS_UNIX
-		bzero((char *) &serv_addr, sizeof(serv_addr));
-	#endif
+        else {
+            printf("Function failed with error: %ld\n", dwError);
+        }
 
-	#if defined OS_WIN
-		memset((char *) &serv_addr, 0, sizeof(serv_addr));
-	#endif
+#endif
 
-	serv_addr.sin_family = AF_INET;
+#if defined OS_UNIX
+        error (1, 2, "host non-existant");
+#endif
 
-	#if defined OS_UNIX
-		bcopy((char *)server->h_addr, (char *)&serv_addr.sin_addr.s_addr, server->h_length);
-	#endif
+        return 0;
 
-	#if defined OS_WIN
-		memcpy((char *)server->h_addr, (char *)&serv_addr.sin_addr.s_addr, server->h_length);
-	#endif
+    }
 
-	serv_addr.sin_port = htons(port);
+    // prepare connection (clear the buffer)
+#if defined OS_UNIX
+    bzero((char *) &serv_addr, sizeof(serv_addr));
+#endif
 
-	// connect to server
-	if (::connect(csock,(struct sockaddr *)&serv_addr,sizeof(serv_addr)) < 0) {
-		error(1, 3, "connecting");
-	}
-	
-	// set local
-	socket = csock;
-	
-	// return data
-	return csock;
+#if defined OS_WIN
+    memset((char *) &serv_addr, 0, sizeof(serv_addr));
+#endif
+
+    serv_addr.sin_family = AF_INET;
+
+#if defined OS_UNIX
+    bcopy((char *)server->h_addr, (char *)&serv_addr.sin_addr.s_addr, server->h_length);
+#endif
+
+#if defined OS_WIN
+    memcpy((char *)server->h_addr, (char *)&serv_addr.sin_addr.s_addr, server->h_length);
+#endif
+
+    serv_addr.sin_port = htons(port);
+
+    // connect to server
+    if (::connect(csock, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
+        error(1, 3, "connecting");
+    }
+
+    // set local
+    socket = csock;
+
+    // return data
+    return csock;
 
 }
 
 // disconnect interface
-int netsock::disconnect () { disconnect (socket); };
+int netsock::disconnect() { disconnect(socket); };
 
 // disconnect (windows)
 #if defined OS_WIN
-	//int netsock::disconnect (SOCKET sockfd) { closesocket(sockfd); }
-	int netsock::disconnect (int sockfd) { closesocket(sockfd); }
+//int netsock::disconnect (SOCKET sockfd) { closesocket(sockfd); }
+int netsock::disconnect (int sockfd) { closesocket(sockfd); }
 #endif
 
 // disconnect (unix)
 #if defined OS_UNIX
-	int netsock::disconnect (int sockfd) { close(sockfd); }
+int netsock::disconnect (int sockfd) { close(sockfd); }
 #endif
 
 // listen for connection
-int netsock::listen (int port) {
+int netsock::listen(int port) {
 
-	// create data blocks
-	int lsock;
-	struct sockaddr_in serv_addr;
+    // create data blocks
+    int lsock;
+    struct sockaddr_in serv_addr;
 
-	// generate socket
-	lsock = ::socket(AF_INET, SOCK_STREAM, 0);
+    // generate socket
+    lsock = ::socket(AF_INET, SOCK_STREAM, 0);
 
-	// check for errors
-	if (lsock < 0) { error(1, 4, "opening socket"); }
+    // check for errors
+    if (lsock < 0) { error(1, 4, "opening socket"); }
 
-	// set up socket (clear the buffer)
-	#if defined OS_UNIX
-		bzero((char *) &serv_addr, sizeof(serv_addr));
-	#endif
+    // set up socket (clear the buffer)
+#if defined OS_UNIX
+    bzero((char *) &serv_addr, sizeof(serv_addr));
+#endif
 
-	#if defined OS_WIN
-		memset((char *) &serv_addr, 0, sizeof(serv_addr));
-	#endif
+#if defined OS_WIN
+    memset((char *) &serv_addr, 0, sizeof(serv_addr));
+#endif
 
-	serv_addr.sin_family = AF_INET;
-	serv_addr.sin_addr.s_addr = INADDR_ANY;
-	serv_addr.sin_port = htons(port);
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_addr.s_addr = INADDR_ANY;
+    serv_addr.sin_port = htons(port);
 
-	// bind socket
-	if (bind(lsock, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
-		error(1, 5, "binding");
-	}
+    // bind socket
+    if (bind(lsock, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
+        error(1, 5, "binding");
+    }
 
-	// listen for connections
-	::listen (lsock, 5);
+    // listen for connections
+    ::listen(lsock, 5);
 
-	// return socket
-	return lsock;
+    // return socket
+    return lsock;
 
-}        
+}
 
 // sending interface
-int netsock::send (const char *data) { send(socket, data); };
+int netsock::send(const char *data) { send(socket, data); };
 
 // sending function
 int netsock::send(int sock, const char *data) {
 
-	// create data blocks
-	int n;
+    // create data blocks
+    int n;
 
-	// write to server
-	#if defined OS_UNIX
-		n = write(sock, data, strlen(data));
-	#endif
+    // write to server
+#if defined OS_UNIX
+    n = write(sock, data, strlen(data));
+#endif
 
-	#if defined OS_WIN
-		n = send(sock, buffer, strlen(data), 0);
-	#endif
-	
-	if (n < 0) { error(1, 6, "writing to socket"); }
-	
-	// return success
-	return n;
+#if defined OS_WIN
+    n = send(sock, buffer, strlen(data), 0);
+#endif
+
+    if (n < 0) { error(1, 6, "writing to socket"); }
+
+    // return success
+    return n;
 
 }
 
@@ -230,28 +230,31 @@ const char *netsock::receive() { return receive(socket); }
 // receiving function
 const char *netsock::receive(int sock) {
 
-	// declare variables
-	int bytes_read = 0;
-	std::string temp;
-	
-	// erase string
-	temp.empty();
-	
-	// receive
-	// do {
-	while (1) {
-		memset(buffer, 0, strlen(buffer));
-		bytes_read = recv(sock, buffer, sizeof(buffer), 0);
-		if (bytes_read > 0) { temp += buffer; break; }
-		else { break; }
-	}
-	//} while (bytes_read > 0)
-	
-	// handle errors
-	if (bytes_read < 0) { error(1, 7, "reading from socket"); }
-	
-	// return data
-	return temp.c_str();
+    // declare variables
+    int bytes_read = 0;
+    std::string temp;
+
+    // erase string
+    temp.empty();
+
+    // receive
+    // do {
+    while (1) {
+        memset(buffer, 0, strlen(buffer));
+        bytes_read = recv(sock, buffer, sizeof(buffer), 0);
+        if (bytes_read > 0) {
+            temp += buffer;
+            break;
+        }
+        else { break; }
+    }
+    //} while (bytes_read > 0)
+
+    // handle errors
+    if (bytes_read < 0) { error(1, 7, "reading from socket"); }
+
+    // return data
+    return temp.c_str();
 
 }
 

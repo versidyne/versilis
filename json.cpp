@@ -16,10 +16,10 @@ using namespace std;
 #include "json.h"
 
 // constructors
-json::json () { /* do nothing */ }
+json::json() { /* do nothing */ }
 
 // constructors
-json::json (char *raw) { storage = raw; }
+json::json(char *raw) { storage = raw; }
 
 // operators
-void json::operator = (char *raw) { storage = raw; }
+void json::operator=(char *raw) { storage = raw; }

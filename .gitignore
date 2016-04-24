@@ -31,6 +31,10 @@
 *.layout
 *.dev
 
-# Compilation file
+# Compilation files
 Makefile.win
 main.cpp
+
+# JetBrains
+.idea
+.idea/*
