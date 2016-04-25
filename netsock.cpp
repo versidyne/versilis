@@ -13,17 +13,17 @@
 
 // windows networking
 #if defined OS_WIN
-#include <windows.h>
-#include <windowsx.h>
-#include <commctrl.h>
-#include <winsock.h>
+    #include <windows.h>
+    #include <windowsx.h>
+    #include <commctrl.h>
+    #include <winsock.h>
 #endif
 
 // unix networking
 #if defined OS_UNIX
-#include <netdb.h>
-#include <netinet/in.h>
-#include <sys/socket.h>
+    #include <netdb.h>
+    #include <netinet/in.h>
+    #include <sys/socket.h>
 #endif
 
 // class header
@@ -36,21 +36,15 @@ netsock::netsock() { /* bi = 0; */ }
 /*netsock & netsock::operator << (const char* buf) {
 
 	int len = strlen(buf);
-
 	memmove (buffer+bi, buf, len);
-
 	bi += len;
 
 	if (buf[len-1] == '\n' && buf[len-2] == '\r') {
-
 		send(fd,buffer,bi,0);
-
 		bi = 0;
-
 	}
 
 	return *this;
-
 }*/
 
 // connect function

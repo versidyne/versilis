@@ -19,10 +19,14 @@ using namespace std;
 text::text() { /* do nothing */ }
 
 // constructors
-text::text(char *raw) { storage = raw; }
+text::text(char *raw) {
+    storage = raw;
+}
 
 // operators
-void text::operator=(char *raw) { storage = raw; }
+void text::operator=(char *raw) {
+    storage = raw;
+}
 
 // remove whitespace from string
 void text::clean(char *data) {
@@ -86,7 +90,9 @@ bool text::contains(char *haystack, char needle) {
     temp = strchr(haystack, needle);
 
     // check if found
-    if (temp != NULL) { cont = true; }
+    if (temp != NULL) {
+        cont = true;
+    }
 
     // return condition
     return cont;
@@ -144,13 +150,13 @@ int text::type(char *data) {
     for (i = 0; i < strlen(data); i++) {
 
         // detect numeric
-        if (isdigit(data[i])) { if (datatype == 0) { datatype = 1; }}
+        if (isdigit(data[i]) && datatype == 0) datatype = 1;
 
         // detect float
-        if (datatype == 1 && data[i] == '.') { datatype = 2; }
+        if (datatype == 1 && data[i] == '.') datatype = 2;
 
         // detect alphabet
-        if (isalpha(data[i])) { datatype = 3; }
+        if (isalpha(data[i])) datatype = 3;
 
     }
 
@@ -160,16 +166,24 @@ int text::type(char *data) {
 }
 
 // returns a value from a text file
-char *text::get(const char *section, const char *key) { return get(section, key, storage); }
+char *text::get(const char *section, const char *key) {
+    return get(section, key, storage);
+}
 
 // returns a value from a text file
-char *text::getchar(const char *section, const char *key) { return get(section, key, storage); }
+char *text::getchar(const char *section, const char *key) {
+    return get(section, key, storage);
+}
 
 // converts a value to float
-float text::getfloat(const char *section, const char *key) { return (float) atof(get(section, key, storage)); }
+float text::getfloat(const char *section, const char *key) {
+    return (float) atof(get(section, key, storage));
+}
 
 // converts a value to int
-int text::getint(const char *section, const char *key) { return (float) atoi(get(section, key, storage)); }
+int text::getint(const char *section, const char *key) {
+    return (float) atoi(get(section, key, storage));
+}
 
 // parses a text file
 char *text::get(const char *section, const char *key, const char *file) {
@@ -235,7 +249,9 @@ char *text::get(const char *section, const char *key, const char *file) {
 }
 
 // parses a text string into an array
-char *text::parseline(char *data) { parseline(data, false); }
+char *text::parseline(char *data) {
+    parseline(data, false);
+}
 
 // parses a text string into an array
 char *text::parseline(char *data, bool rvalue) {
@@ -243,24 +259,26 @@ char *text::parseline(char *data, bool rvalue) {
     /* clean lines */
 
     // data strings
-    if (contains(data, ':')) { clean(data, ':'); }
-
+    if (contains(data, ':')) {
+        clean(data, ':');
+    } else if (contains(data, ']') || type(data) == 0) {
         // sections and empty lines
-    else if (contains(data, ']') || type(data) == 0) { clean(data); }
-
+        clean(data);
+    } else {
         // extended data
-    else { clean(data, data[find(data)]); }
+        clean(data, data[find(data)]);
+    }
 
     /* parse data */
 
     // skip any blank lines
-    if (strlen(data) == 0 || strlen(data) == 1 && data[0] == '\n') { return (char *) "\0\0"; }
-
+    if (strlen(data) == 0 || strlen(data) == 1 && data[0] == '\n') {
+        return (char *) "\0\0";
+    } else if (data[0] == '#') {
         // skip any comment lines
-        //else if(data[0] == '#') { /* do nothing */ }
+    } else if (data[0] == '[') {
 
         // handle bracketed lines
-    else if (data[0] == '[') {
 
         // determine section name
         string stemp = data;
@@ -269,10 +287,9 @@ char *text::parseline(char *data, bool rvalue) {
 
         return sname;
 
-    }
+    } else {
 
         // process valid lines
-    else {
 
         // initial data
         if (contains(data, ':')) {
@@ -403,7 +420,9 @@ bool text::set(const char *section, const char *key, const char *data, const cha
                     spres = true;
                     kpres = false;
                 }
-                if (strcmp(temp, key) == 0) { kpres = true; }
+                if (strcmp(temp, key) == 0) {
+                    kpres = true;
+                }
 
                 // check for value
                 if (spres && kpres) {
@@ -412,12 +431,15 @@ bool text::set(const char *section, const char *key, const char *data, const cha
                     kpres = false;
                     vpres = true;
                     // replace value
-                    if (data[strlen(data)] == '\n' && data[strlen(data) - 1] == '\r') { fout << key << ": " << data; }
-                    else { fout << key << ": " << data << "\r\n"; }
-                }
-
+                    if (data[strlen(data)] == '\n' && data[strlen(data) - 1] == '\r') {
+                        fout << key << ": " << data;
+                    } else {
+                        fout << key << ": " << data << "\r\n";
+                    }
+                } else {
                     // change nothing
-                else { fout << line; }
+                    fout << line;
+                }
 
                 // erase array for new line
                 memset(line, 0, strlen(line));

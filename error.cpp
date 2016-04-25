@@ -4,21 +4,44 @@
 
 // standard libraries
 #include <string>
-#include <stdio.h>
+#include <iostream>
 
-// namespaces
 using namespace std;
 
 // header file
 #include "error.h"
 
+/**
+ * @param error
+ * @param chain
+ * @constructor
+ */
+/*
+Stratus.Prototypes.Error = function (error, chain) {
+    this.code = 'Internal';
+    this.message = 'No discernible data received.';
+    this.chain = [];
+
+    if (typeof error == 'string') {
+        this.message = error;
+    } else if (error && typeof error == 'object') {
+        _.extend(this, error);
+    }
+
+    this.chain.push(chain);
+};
+ */
+
 // error handler
 void error(int abort, int code, const char *message) {
 
-    /*int tui = 0;
+    /*
+    int tui = 0;
     if (tui == 1) { tui::display(msg); }
-    else { perror(temp.c_str()); }*/
+    else { perror(temp.c_str()); }
+    */
 
+    /*
     // declare variables
     string temp;
 
@@ -41,5 +64,6 @@ void error(int abort, int code, const char *message) {
 
     // handle abort
     //if (abort == 1) { exit(1); }
+    */
 
 }

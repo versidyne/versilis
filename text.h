@@ -20,34 +20,24 @@ public:
 
     // information
     bool contains(char *haystack, char needle);
-
     int find(char *haystack);
-
     int find(char *haystack, char needle);
-
     int type(char *data);
 
     // manipulation
     void clean(char *data);
-
     void clean(char *data, char delim);
 
     // gathering interfaces
     char *get(const char *section, const char *key);
-
     char *getchar(const char *section, const char *key);
-
     float getfloat(const char *section, const char *key);
-
     int getint(const char *section, const char *key);
 
     // setting interfaces
     bool set(const char *section, const char *key, const char *data);
-
     bool set(const char *section, const char *key, float data);
-
     bool set(const char *section, const char *key, int data);
-
 
 private:
     // local data

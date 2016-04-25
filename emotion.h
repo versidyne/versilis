@@ -1,11 +1,12 @@
 // name: emotion.h
 // version: 1.0
-// description: creates emotions
+// description: stores changes in emotion
 
 // ensure declarations only occur once
 #ifndef EMOTION_H
 #define EMOTION_H
 
+/*
 // define types
 class connector;
 
@@ -41,7 +42,6 @@ private:
     char *storage;
     double value;
     std::vector <Connection> connections;
-
 };
 
 class emotion {
@@ -61,5 +61,6 @@ private:
     connector food, love, health, sleep;
 
 };
+*/
 
 #endif

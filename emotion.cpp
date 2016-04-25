@@ -15,6 +15,7 @@ using namespace std;
 // emotion class header
 #include "emotion.h"
 
+/*
 // constructors
 emotion::emotion() {
     food.AddConnector(health, increase_dramatically);
@@ -46,3 +47,4 @@ void connector::Affect(double deltavalue, type_of_affection afc) {
     // Don't use "ChangeValue" for circle-connections
     // or handle circle conenctions better
 }
+*/
