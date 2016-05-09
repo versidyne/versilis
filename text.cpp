@@ -129,7 +129,9 @@ int text::find(char *haystack, char needle) {
     temp = strchr(haystack, needle);
 
     // determine position
-    if (temp != NULL) { pos = strlen(haystack) - strlen(temp); }
+    if (temp != NULL) {
+        pos = strlen(haystack) - strlen(temp);
+    }
 
     // return condition
     return pos;
@@ -243,8 +245,8 @@ char *text::get(const char *section, const char *key, const char *file) {
 
     fin.close();
 
-    if (vpres) { return parseline(line, true); }
-    else { return '\0'; }
+    //return (vpres) ? parseline(line, true) : '\0';
+    return (vpres) ? parseline(line, true) : nullptr;
 
 }
 
@@ -272,7 +274,7 @@ char *text::parseline(char *data, bool rvalue) {
     /* parse data */
 
     // skip any blank lines
-    if (strlen(data) == 0 || strlen(data) == 1 && data[0] == '\n') {
+    if (strlen(data) == 0 || (strlen(data) == 1 && data[0] == '\n')) {
         return (char *) "\0\0";
     } else if (data[0] == '#') {
         // skip any comment lines

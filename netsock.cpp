@@ -12,18 +12,20 @@
 #include "error.h"
 
 // windows networking
-#if defined OS_WIN
-    #include <windows.h>
-    #include <windowsx.h>
-    #include <commctrl.h>
-    #include <winsock.h>
+#ifdef OS_WIN
+#include <windows.h>
+#include <windowsx.h>
+#include <commctrl.h>
+#include <winsock.h>
 #endif
 
 // unix networking
-#if defined OS_UNIX
-    #include <netdb.h>
-    #include <netinet/in.h>
-    #include <sys/socket.h>
+#ifdef OS_UNIX
+
+#include <netdb.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+
 #endif
 
 // class header
@@ -49,79 +51,58 @@ netsock::netsock() { /* bi = 0; */ }
 
 // connect function
 int netsock::connect(const char *hostname, int port) {
-
     // create data blocks
     int csock;
     struct hostent *server;
     struct sockaddr_in serv_addr;
-
-#if defined OS_WIN
+#ifdef OS_WIN
     DWORD dwError;
     WORD wVersionRequested;
     WSADATA wsaData;
 #endif
-
     // open socket
     csock = ::socket(AF_INET, SOCK_STREAM, 0);
-
-    if (csock < 0) {
-        error(1, 1, "opening socket");
-    }
-
+    if (csock < 0) error(1, 1, "opening socket");
+#ifdef OS_WIN
     // initialize winsock
-#if defined OS_WIN
     wVersionRequested = MAKEWORD( 1, 1 );
     WSAStartup( wVersionRequested, &wsaData );
 #endif
-
     // store server name
     server = gethostbyname(hostname);
-
     // check if the server exists
     if (server == NULL) {
-
 #if defined OS_WIN
-
         dwError = WSAGetLastError();
-
         if (dwError == WSAHOST_NOT_FOUND) {
             printf("Host not found\n");
-        }
-
-        else if (dwError == WSANO_DATA) {
+        } else if (dwError == WSANO_DATA) {
             printf("No data record found\n");
-        }
-
-        else {
+        } else {
             printf("Function failed with error: %ld\n", dwError);
         }
-
+#elif defined OS_UNIX
+        error(1, 2, "host non-existant");
 #endif
-
-#if defined OS_UNIX
-        error (1, 2, "host non-existant");
-#endif
-
         return 0;
-
     }
 
     // prepare connection (clear the buffer)
-#if defined OS_UNIX
+#ifdef OS_UNIX
     bzero((char *) &serv_addr, sizeof(serv_addr));
 #endif
 
-#if defined OS_WIN
+#ifdef OS_WIN
     memset((char *) &serv_addr, 0, sizeof(serv_addr));
 #endif
 
     serv_addr.sin_family = AF_INET;
 
-#if defined OS_UNIX
-    bcopy((char *)server->h_addr, (char *)&serv_addr.sin_addr.s_addr, server->h_length);
+#ifdef OS_UNIX
+    bcopy((char *) server->h_addr, (char *) &serv_addr.sin_addr.s_addr, server->h_length);
 #endif
 
-#if defined OS_WIN
+#ifdef OS_WIN
     memcpy((char *)server->h_addr, (char *)&serv_addr.sin_addr.s_addr, server->h_length);
 #endif
 
@@ -144,14 +125,14 @@ int netsock::connect(const char *hostname, int port) {
 int netsock::disconnect() { disconnect(socket); };
 
 // disconnect (windows)
-#if defined OS_WIN
+#ifdef OS_WIN
 //int netsock::disconnect (SOCKET sockfd) { closesocket(sockfd); }
 int netsock::disconnect (int sockfd) { closesocket(sockfd); }
 #endif
 
 // disconnect (unix)
-#if defined OS_UNIX
-int netsock::disconnect (int sockfd) { close(sockfd); }
+#ifdef OS_UNIX
+int netsock::disconnect(int sockfd) { return 0;/*close(sockfd);*/ }
 #endif
 
 // listen for connection
@@ -168,11 +149,11 @@ int netsock::listen(int port) {
     if (lsock < 0) { error(1, 4, "opening socket"); }
 
     // set up socket (clear the buffer)
-#if defined OS_UNIX
+#ifdef OS_UNIX
     bzero((char *) &serv_addr, sizeof(serv_addr));
 #endif
 
-#if defined OS_WIN
+#ifdef OS_WIN
     memset((char *) &serv_addr, 0, sizeof(serv_addr));
 #endif
 
@@ -204,10 +185,8 @@ int netsock::send(int sock, const char *data) {
 
     // write to server
 #if defined OS_UNIX
-    n = write(sock, data, strlen(data));
-#endif
-
-#if defined OS_WIN
+    /*n = write(sock, data, strlen(data));*/
+#elif defined OS_WIN
     n = send(sock, buffer, strlen(data), 0);
 #endif
 
@@ -258,11 +237,11 @@ const char *netsock::receive(int sock) {
 	int newsockfd;
 
 	// run accept
-	#if defined OS_UNIX
+	#ifdef OS_UNIX
 		newsockfd = ::accept (sock, (struct sockaddr *) &cli_addr, (socklen_t *) &clilen);
 	#endif
 
-	#if defined OS_WIN
+	#ifdef OS_WIN
 		newsockfd = ::accept (sock, (struct sockaddr *) &cli_addr, (int*) &clilen);
 	#endif
 

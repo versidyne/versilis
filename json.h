@@ -18,10 +18,19 @@ public:
     // operators
     void operator=(char *raw);
 
+    // parsing
+    template<class type>
+    type parse(char *data);
+
+    // stringify
+    char *stringify(bool data);
+    char *stringify(int data);
+    char *stringify(double data);
+    char *stringify(char *data);
+
 private:
     // local data
     char *storage;
-
 };
 
 #endif
