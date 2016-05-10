@@ -6,6 +6,9 @@
 #ifndef JSON_H
 #define JSON_H
 
+// libraries
+#include <string>
+
 // json parsing class
 class json {
 
@@ -23,14 +26,23 @@ public:
     type parse(char *data);
 
     // stringify
-    char *stringify(bool data);
-    char *stringify(int data);
-    char *stringify(double data);
-    char *stringify(char *data);
+    std::string stringify(bool data);
+    std::string stringify(short int data);
+    std::string stringify(unsigned short int data);
+    std::string stringify(int data);
+    std::string stringify(long int data);
+    std::string stringify(long long int data);
+    std::string stringify(unsigned int data);
+    std::string stringify(unsigned long int data);
+    std::string stringify(unsigned long long int data);
+    std::string stringify(double data);
+    std::string stringify(long double data);
+    std::string stringify(float data);
+    std::string stringify(char *data);
 
 private:
     // local data
-    char *storage;
+    std::string storage;
 };
 
 #endif

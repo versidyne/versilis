@@ -2,12 +2,6 @@
 // version: 1.0
 // description: json parsing
 
-// libraries
-#include <iostream>
-
-// namespaces
-using namespace std;
-
 // json class header
 #include "json.h"
 
@@ -26,27 +20,54 @@ type json::parse(char *data) {
     //return;
 };
 
-// overloads
-char *json::stringify(bool data) {
-    char *tempstr;
-    char truestr[] = {"true"};
-    char falsestr[] = {"false"};
-    tempstr = (data) ? truestr : falsestr;
-    return tempstr;
+std::string json::stringify(bool data) {
+    return (data) ? "true" : "false";
 };
 
-char *json::stringify(int data) {
-    char *temp;
-    sprintf(temp, "%d", data);
-    return temp;
+std::string json::stringify(short int data) {
+    return std::to_string(data);
 };
 
-char *json::stringify(double data) {
-    char *temp;
-    sprintf(temp, "%f", data);
-    return temp;
+std::string json::stringify(unsigned short int data) {
+    return std::to_string(data);
 };
 
-char *json::stringify(char *data) {
+std::string json::stringify(int data) {
+    return std::to_string(data);
+};
+
+std::string json::stringify(long int data) {
+    return std::to_string(data);
+};
+
+std::string json::stringify(long long int data) {
+    return std::to_string(data);
+};
+
+std::string json::stringify(unsigned int data) {
+    return std::to_string(data);
+};
+
+std::string json::stringify(unsigned long int data) {
+    return std::to_string(data);
+};
+
+std::string json::stringify(unsigned long long int data) {
+    return std::to_string(data);
+};
+
+std::string json::stringify(double data) {
+    return std::to_string(data);
+};
+
+std::string json::stringify(long double data) {
+    return std::to_string(data);
+};
+
+std::string json::stringify(float data) {
+    return std::to_string(data);
+};
+
+std::string json::stringify(char *data) {
     return data;
 };
